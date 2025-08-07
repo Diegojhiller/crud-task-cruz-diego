@@ -1,0 +1,26 @@
+{
+  "name": "crud-task-cruz-diego",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Diegojhiller/crud-task-cruz-diego.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Diegojhiller/crud-task-cruz-diego/issues"
+  },
+  "homepage": "https://github.com/Diegojhiller/crud-task-cruz-diego#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mysql": "^2.18.1",
+    "sequelize": "^6.37.7"
+  }
+}
