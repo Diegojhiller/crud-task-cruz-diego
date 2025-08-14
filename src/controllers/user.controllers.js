@@ -1,38 +1,65 @@
 import User from '../models/user.model.js';
 
-export const createUser = async (req, res) => {
+
+export const getUsers = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-
-    
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
-    }
-
-    if (name.length > 100 || email.length > 100 || password.length > 100) {
-      return res.status(400).json({ message: 'Cada campo debe tener como máximo 100 caracteres.' });
-    }
-
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Ya existe un usuario con ese email.' });
-    }
-
-    const newUser = await User.create({ name, email, password });
-    res.status(201).json({ message: 'Usuario creado con éxito.', user: newUser });
-
+    const users = await User.findAll();
+    return res.status(200).json(users);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al crear el usuario.' });
+    return res.status(500).json({ message: 'Error al obtener los usuarios', error });
   }
 };
 
-export const getAllUsers = async (req, res) => {
+
+export const getUserById = async (req, res) => {
   try {
-    const users = await User.findAll();
-    res.status(200).json(users);
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+    return res.status(200).json(user);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al obtener los usuarios.' });
+    return res.status(500).json({ message: 'Error al obtener el usuario', error });
+  }
+};
+
+
+export const createUser = async (req, res) => {
+  try {
+    // Lógica de validación de datos del usuario irá aquí
+    const newUser = await User.create(req.body);
+    return res.status(201).json(newUser);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al crear el usuario', error });
+  }
+};
+
+
+export const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Lógica de validación y actualización irá aquí
+    const [updatedRows] = await User.update(req.body, { where: { id } });
+    if (updatedRows === 0) {
+        return res.status(404).json({ message: 'Usuario no encontrado o no se pudo actualizar' });
+    }
+    return res.status(200).json({ message: 'Usuario actualizado con éxito' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al actualizar el usuario', error });
+  }
+};
+
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedRows = await User.destroy({ where: { id } });
+    if (deletedRows === 0) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+    return res.status(200).json({ message: 'Usuario eliminado con éxito' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al eliminar el usuario', error });
   }
 };
