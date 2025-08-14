@@ -1,12 +1,9 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
+import User from './user.model.js';
 
 const Task = sequelize.define('Task', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
+  
   title: {
     type: DataTypes.STRING(100),
     allowNull: false,
@@ -20,6 +17,7 @@ const Task = sequelize.define('Task', {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+  timestamps: false,
 });
 
 export default Task;
