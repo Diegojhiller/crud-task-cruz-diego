@@ -1,27 +1,43 @@
 import User from '../models/user.model.js';
-
+import Task from '../models/task.model.js'; 
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      include: [
+        {
+          model: Task,
+        }
+      ]
+    });
     return res.status(200).json(users);
   } catch (error) {
-    return res.status(500).json({ message: 'Error al obtener los usuarios', error });
+    console.error(error); 
+    return res.status(500).json({ message: 'Error al obtener los usuarios.' });
   }
 };
+
 
 export const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, {
+      include: [
+        {
+          model: Task,
+        }
+      ]
+    });
     if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      return res.status(404).json({ message: 'Usuario no encontrado.' });
     }
     return res.status(200).json(user);
   } catch (error) {
-    return res.status(500).json({ message: 'Error al obtener el usuario', error });
+    console.error(error);
+    return res.status(500).json({ message: 'Error al obtener el usuario.' });
   }
 };
+
 
 export const createUser = async (req, res) => {
   try {
@@ -30,7 +46,7 @@ export const createUser = async (req, res) => {
     if (!name || typeof name !== 'string') {
       return res.status(400).json({ message: 'El nombre es obligatorio y debe ser una cadena de texto.' });
     }
-   
+    
     if (name.length > 100) {
       return res.status(400).json({ message: 'El nombre no puede tener más de 100 caracteres.' });
     }
@@ -46,11 +62,11 @@ export const createUser = async (req, res) => {
     if (!password || typeof password !== 'string') {
       return res.status(400).json({ message: 'La contraseña es obligatoria y debe ser una cadena de texto.' });
     }
-   
+    
     if (password.length > 100) {
       return res.status(400).json({ message: 'La contraseña no puede tener más de 100 caracteres.' });
     }
-   
+    
     const newUser = await User.create({ name, email, password });
     return res.status(201).json(newUser);
   } catch (error) {
@@ -62,7 +78,8 @@ export const createUser = async (req, res) => {
   }
 };
 
-s
+
+
 export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -88,7 +105,7 @@ export const updateUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado.' });
     }
- 
+  
     await user.update({ name, email, password });
     return res.status(200).json({ message: 'Usuario actualizado con éxito.' });
   } catch (error) {
@@ -99,6 +116,7 @@ export const updateUser = async (req, res) => {
     return res.status(500).json({ message: 'Error al actualizar el usuario', error });
   }
 };
+
 
 export const deleteUser = async (req, res) => {
   try {

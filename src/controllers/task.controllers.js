@@ -1,94 +1,96 @@
 import Task from '../models/task.model.js';
+import User from '../models/user.model.js'; 
+
+export const createTask = async (req, res) => {
+  try {
+    const { title, description, isComplete, userId } = req.body;
+
+    if (!title || !description || !userId) {
+      return res.status(400).json({ message: 'El título, la descripción y el ID de usuario son requeridos.' });
+    }
+
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado. No se puede crear la tarea.' });
+    }
+    const newTask = await Task.create({
+      title,
+      description,
+      isComplete: isComplete || false,
+      userId,
+    });
+
+    return res.status(201).json(newTask);
+
+  } catch (error) {
+
+    if (error.name === 'SequelizeUniqueConstraintError'){
+      return res.status(400).json({ message: 'El título de la tarea ya existe.' });
+    }
+    console.error(error);
+    return res.status(500).json({ message: 'Error al crear la tarea.' });
+  }
+};
+
 
 export const getTasks = async (req, res) => {
   try {
-    const tasks = await Task.findAll();
+    const tasks = await Task.findAll({
+      include: [
+        {
+          model: User, 
+          attributes: ['name', 'email'] 
+        }
+      ]
+    });
     return res.status(200).json(tasks);
   } catch (error) {
-    return res.status(500).json({ message: 'Error al obtener las tareas', error });
+    console.error(error);
+    return res.status(500).json({ message: 'Error al obtener las tareas.' });
   }
 };
 
 export const getTaskById = async (req, res) => {
   try {
     const { id } = req.params;
-    const task = await Task.findByPk(id);
+    const task = await Task.findByPk(id, {
+      include: [
+        {
+          model: User,
+          attributes: ['name', 'email']
+        }
+      ]
+    });
     if (!task) {
-      return res.status(404).json({ message: 'Tarea no encontrada' });
+      return res.status(404).json({ message: 'Tarea no encontrada.' });
     }
     return res.status(200).json(task);
   } catch (error) {
-    return res.status(500).json({ message: 'Error al obtener la tarea', error });
+    console.error(error);
+    return res.status(500).json({ message: 'Error al obtener la tarea.' });
   }
 };
-
-export const createTask = async (req, res) => {
-  try {
-    const { title, descrition, isComplete} = req.body;
-    if (!title || typeof title != 'string') {
-      return res.sataus(400).json({ message: "Escriba un titulo por favor" })
-    }
-    if (title.length > 100) {
-      return res.sataus(400).json({ message: 'Titulo muy extenso'})
-    }
-    if (title.length > 100) {
-      return res.sataus(400).json({ message: 'Descripcion obligatoria'})
-    }
-    if (title.length > 100) {
-      return res.sataus(400).json({ message: 'Descripcion extensa'})
-    }
-    if (isComplete !== undefined && typeof isComplete !== 'boolean') {
-      return res.status(400).json({ message: 'isComplete debe ser verdadero o falso.' });
-    }
-
-  
-    const newTask = await Task.create({ title, description, isComplete});
-    return res.status(201).json(newTask);
-  } catch (error) {
-    if (error.name === 'SedquelizeUniqueConstraintError'){
-      return res.status(400).json({ message: 'Titulo ya existente'})
-    }
-    return res.status(500).json({ message: 'Error al crear la tarea', error });
-  };
-};
-
 
 export const updateTask = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, isComplete } = req.body;
+    const { title, description, isComplete, userId } = req.body;
 
-    if (!title && !description && isComplete === undefined) {
-      return res.status(400).json({ message: 'No hay datos para actualizar.' });
-    }
-
-    if (title && (typeof title !== 'string' || title.length > 100)) {
-      return res.status(400).json({ message: 'El título debe ser una cadena de texto de máximo 100 caracteres.' });
-    }
-
-    if (description && (typeof description !== 'string' || description.length > 100)) {
-      return res.status(400).json({ message: 'La descripción debe ser una cadena de texto de máximo 100 caracteres.' });
-    }
-
-    if (isComplete !== undefined && typeof isComplete !== 'boolean') {
-      return res.status(400).json({ message: 'isComplete debe ser un valor booleano.' });
-    }
-    
     const task = await Task.findByPk(id);
     if (!task) {
         return res.status(404).json({ message: 'Tarea no encontrada.' });
     }
 
-    await task.update({ title, description, isComplete });
+    await task.update({ title, description, isComplete, userId });
     return res.status(200).json({ message: 'Tarea actualizada con éxito.' });
   } catch (error) {
     if (error.name === 'SequelizeUniqueConstraintError') {
       return res.status(400).json({ message: 'El título de la tarea ya existe.' });
     }
-    return res.status(500).json({ message: 'Error al actualizar la tarea', error });
+    console.error(error);
+    return res.status(500).json({ message: 'Error al actualizar la tarea.' });
   }
 };
-
 
 export const deleteTask = async (req, res) => {
   try {
@@ -99,6 +101,7 @@ export const deleteTask = async (req, res) => {
     }
     return res.status(200).json({ message: 'Tarea eliminada con éxito' });
   } catch (error) {
-    return res.status(500).json({ message: 'Error al eliminar la tarea', error });
+    console.error(error);
+    return res.status(500).json({ message: 'Error al eliminar la tarea.' });
   }
 };

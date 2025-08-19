@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
+
 const User = sequelize.define('User', {
   name: {
     type: DataTypes.STRING(100),
@@ -15,12 +16,6 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING(100),
     allowNull: false,
   },
-  
-  timestamps: false,
-  
 });
 
-User.hasMany(Task, {
-  foreingKey: 'userId',
-});
 export default User;
