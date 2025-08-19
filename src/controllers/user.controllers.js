@@ -62,7 +62,7 @@ export const createUser = async (req, res) => {
   }
 };
 
-s
+
 export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
