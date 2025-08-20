@@ -1,4 +1,3 @@
-// src/controllers/user-role.controller.js
 import User from '../models/user.model.js';
 import Role from '../models/rol.model.js';
 

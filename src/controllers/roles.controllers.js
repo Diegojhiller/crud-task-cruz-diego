@@ -1,4 +1,3 @@
-// src/controllers/roles.controller.js
 import Role from '../models/rol.model.js';
 
 export const createRole = async (req, res) => {

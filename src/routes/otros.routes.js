@@ -1,4 +1,3 @@
-// src/routes/otros.routes.js
 import { Router } from 'express';
 import { assignRoleToUser, getUsersWithRoles } from '../controllers/user-role.controller.js'; 
 

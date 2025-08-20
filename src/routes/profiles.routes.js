@@ -1,4 +1,3 @@
-
 import { Router } from 'express';
 import { createProfile, getProfilesWithAddress } from '../controllers/profiles.controllers.js';
 

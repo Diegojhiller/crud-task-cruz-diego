@@ -1,4 +1,3 @@
-// src/routes/roles.routes.js
 import { Router } from 'express';
 import { createRole, getRoles } from '../controllers/roles.controllers.js';
 
