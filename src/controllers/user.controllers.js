@@ -1,6 +1,7 @@
 import User from '../models/user.model.js';
 import Task from '../models/task.model.js'; 
 
+
 export const getUsers = async (req, res) => {
   try {
     const users = await User.findAll({
