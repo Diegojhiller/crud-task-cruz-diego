@@ -1,7 +1,7 @@
 // src/routes/user.routes.js
 import { Router } from 'express';
 import {
-    getUsers,
+    getAllUsers,
     getUserById,
     createUser,
     updateUser,
@@ -12,7 +12,7 @@ import { assignRoleToUser, getUsersWithRoles } from '../controllers/user-role.co
 const router = Router();
 
 // Rutas de CRUD para la entidad User
-router.get('/', getUsers);
+router.get('/', getAllUsers);
 router.get('/:id', getUserById);
 router.post('/', createUser);
 router.put('/:id', updateUser);

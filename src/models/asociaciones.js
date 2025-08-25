@@ -1,4 +1,3 @@
-// asociaciones.js (Corregido)
 import User from './user.model.js';
 import Task from './task.model.js';
 import Profile from './perfiles.model.js';
@@ -6,20 +5,20 @@ import Address from './direcciones.model.js';
 import Role from './rol.model.js';
 
 // Relación Uno a Uno (User - Profile)
-User.hasOne(Profile, { onDelete: 'CASCADE' });
-Profile.belongsTo(User);
+User.hasOne(Profile, {foreignKey: 'userId', as: 'profile', onDelete: 'CASCADE' });
+Profile.belongsTo(User, {foreignKey: 'userId', as: 'user'} );
 
 // Relación Uno a Uno (Profile - Address)
-// Agrega esta línea para que la creación anidada funcione
-Profile.hasOne(Address, { onDelete: 'CASCADE' }); 
-Address.belongsTo(Profile); // Aquí no necesitas foreignKey porque la clave ya se manejará con la asociación
+
+Profile.hasOne(Address, {foreignKey: 'idProfile', as: 'address', onDelete: 'CASCADE' }); 
+Address.belongsTo(Profile), {foreignKey: 'id', as: 'idProfile'}; 
 
 // Relación Uno a Muchos (User - Task)
-User.hasMany(Task, { onDelete: 'CASCADE' });
-Task.belongsTo(User);
+User.hasMany(Task, {foreignKey: 'userId', as: 'tasks', onDelete: 'CASCADE' });
+Task.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 // Relación Muchos a Muchos (User - Role)
-User.belongsToMany(Role, { through: 'UserRoles' });
-Role.belongsToMany(User, { through: 'UserRoles' });
+User.belongsToMany(Role, { through: 'UserRoles', as: 'role' });
+Role.belongsToMany(User, { through: 'UserRoles', as:'User' });
 
 export { User, Task, Profile, Address, Role };
