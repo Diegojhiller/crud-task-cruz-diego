@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {
-    getUsers,
+    getAllUsers,
     getUserById,
     createUser,
     updateUser,
@@ -10,7 +10,11 @@ import { assignRoleToUser, getUsersWithRoles } from '../controllers/user-role.co
 
 const router = Router();
 
+<<<<<<< HEAD
 router.get('/', getUsers);
+=======
+router.get('/', getAllUsers);
+>>>>>>> develop
 router.get('/:id', getUserById);
 router.post('/', createUser);
 router.put('/:id', updateUser);

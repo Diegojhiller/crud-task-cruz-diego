@@ -32,21 +32,16 @@ export const createTask = async (req, res) => {
   }
 };
 
-
 export const getTasks = async (req, res) => {
   try {
     const tasks = await Task.findAll({
       include: [
-        {
-          model: User, 
-          attributes: ['name', 'email'] 
-        }
+        { model: User, as: "user", attributes: ["id", "name", "email"] },
       ]
     });
-    return res.status(200).json(tasks);
+    res.status(200).json(tasks);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Error al obtener las tareas.' });
+    res.status(500).json({ message: "Error al obtener tareas", error });
   }
 };
 
@@ -57,7 +52,8 @@ export const getTaskById = async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ['name', 'email']
+          as: "user",
+          attributes: ['id', 'name', 'email']
         }
       ]
     });
