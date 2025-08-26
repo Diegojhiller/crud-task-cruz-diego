@@ -22,7 +22,7 @@ export const createRole = async (req, res) => {
 export const getAllRoles = async (req, res) => {
   try {
     const roles = await Role.findAll({
-      include: [{ model: User, as: 'User', attributes: ['name', 'email'] }]
+      include: [{ model: User, as: 'users', attributes: ['id', 'name', 'email'] }]
     });
     res.status(200).json(roles);
   } catch (error) {
@@ -31,12 +31,11 @@ export const getAllRoles = async (req, res) => {
   }
 };
 
-
 export const getRoleById = async (req, res) => {
   try {
     const { id } = req.params;
     const role = await Role.findByPk(id, {
-      include: [{ model: User, as: 'User', attributes: ['name', 'email'] }]
+      include: [{ model: User, as: 'users', attributes: ['id', 'name', 'email'] }]
     });
     if (!role) {
       return res.status(404).json({ message: 'Rol no encontrado.' });
@@ -47,7 +46,6 @@ export const getRoleById = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener el rol.' });
   }
 };
-
 
 export const updateRole = async (req, res) => {
   try {

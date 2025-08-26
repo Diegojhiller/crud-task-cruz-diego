@@ -5,32 +5,25 @@ import Address from '../models/direcciones.model.js';
 
 export const createProfileAndAddress = async (req, res) => {
   try {
-    const { bio, street, city } = req.body;
-    const { userId } = req.params;
+    const { userId, bio, street, city } = req.body;
 
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado.' });
     }
-
-    const newProfile = await Profile.create({
-      bio,
-      userId: userId,
-      Address: {
-        street,
-        city
+    const newProfile = await Profile.create(
+      {bio, userId, address: { street,city,},},
+      {
+        include: [{ model: Address, as: 'address' }],
       }
-    }, {
-      include: [Address]
-    });
-
+    );
     res.status(201).json({ message: 'Perfil y dirección creados', profile: newProfile });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al crear el perfil y la dirección.' });
   }
 };
+
 
 
 export const getAllProfilesWithDetails = async (req, res) => {

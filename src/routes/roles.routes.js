@@ -13,7 +13,6 @@ import {
 
 const router = Router();
 
-// Rutas CRUD básicas para Role
 router.post(
   '/',
   [
@@ -47,7 +46,6 @@ router.delete(
   deleteRole
 );
 
-// Rutas para la relación Muchos a Muchos con User
 router.post(
   '/:roleId/users/:userId',
   [

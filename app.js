@@ -5,6 +5,7 @@ import taskRoutes from './src/routes/task.routes.js';
 import profileRoutes from './src/routes/profiles.routes.js';
 import addressRoutes from './src/routes/addresses.routes.js';
 import roleRoutes from './src/routes/roles.routes.js';
+import './src/models/asociaciones.js'
 
 const app = express();
 const PORT = process.env.PORT || 3000;

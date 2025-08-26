@@ -16,6 +16,10 @@ const Task = sequelize.define('Task', {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+  userId: {  
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   
 });
 

@@ -16,7 +16,7 @@ export const createAddress = async (req, res) => {
     const newAddress = await Address.create({
       street,
       city,
-      idProfile: profileId
+      profileId: profileId
     });
 
     res.status(201).json({ message: 'Dirección creada y asociada al perfil.', address: newAddress });
@@ -33,8 +33,10 @@ export const getAllAddresses = async (req, res) => {
       include: [
         { 
           model: Profile, 
-          as: 'idProfile', 
-          include: [{ model: User, as: 'user', attributes: ['name', 'email'] }] 
+          as: 'profile', 
+          include: [
+            { model: User, as: 'user', attributes: ['name', 'email'] }
+          ]
         }
       ]
     });
@@ -45,6 +47,7 @@ export const getAllAddresses = async (req, res) => {
   }
 };
 
+
 export const getAddressById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -52,7 +55,7 @@ export const getAddressById = async (req, res) => {
       include: [
         { 
           model: Profile, 
-          as: 'idProfile',
+          as: 'profile',
           include: [{ model: User, as: 'user', attributes: ['name', 'email'] }] 
         }
       ]

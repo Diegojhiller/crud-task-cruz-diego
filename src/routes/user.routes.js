@@ -11,7 +11,6 @@ import { assignRoleToUser, getUsersWithRoles } from '../controllers/user-role.co
 
 const router = Router();
 
-// Rutas de CRUD para la entidad User
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);
 router.post('/', createUser);

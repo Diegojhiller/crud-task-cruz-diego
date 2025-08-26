@@ -12,13 +12,17 @@ import {
 const router = Router();
 
 router.post(
-  '/:userId',
+  '/',
   [
-    param('userId').isInt().withMessage('El ID de usuario debe ser un número entero.'),
+    body('userId').isInt().withMessage('El ID de usuario debe ser un número entero.'),
     body('bio').optional().isString().withMessage('La biografía debe ser un texto.'),
+    body('street').optional().isString(),
+    body('city').optional().isString(),
+    validateFields,
   ],
   createProfileAndAddress
 );
+
 
 router.get('/', getAllProfilesWithDetails);
 

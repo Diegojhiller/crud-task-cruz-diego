@@ -32,12 +32,11 @@ export const createTask = async (req, res) => {
   }
 };
 
-export const getAllTasks = async (req, res) => {
+export const getTasks = async (req, res) => {
   try {
     const tasks = await Task.findAll({
       include: [
         { model: User, as: "user", attributes: ["id", "name", "email"] },
-        { model: Project, as: "project", attributes: ["id", "name"] }
       ]
     });
     res.status(200).json(tasks);
@@ -53,7 +52,8 @@ export const getTaskById = async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ['name', 'email']
+          as: "user",
+          attributes: ['id', 'name', 'email']
         }
       ]
     });
